@@ -1,7 +1,7 @@
 ========= Text based Dungeon Crawler =========
 
             Basic idea and structure.
-            Made as a vauge blueprint before coding.
+            Made as a vague blueprint before coding.
 
 
 A console game where the player explores [6] rooms,
@@ -76,12 +76,12 @@ A console game where the player explores [6] rooms,
 
 
 ------ Commands ------
-The player uses written commands to make decicions, interact and act.
+The player uses written commands to make decisions, interact and act.
 commands are not case sensitive, take bfg = Take BFG
 
 Commands:
    - go [north, east, west, south]
-   - look (descirbes the room)
+   - look (describes the room)
    - look [at enemy]
    - take [sword]
    - equip [sword]
@@ -159,7 +159,7 @@ Boss	   80	      15	      20
 
 
 ------ Notes/ideas for later ------
-- make each enemy type their own class with different behaviours, such as abilities or items
+- make each enemy type their own class with different behaviors, such as abilities or items
 - more potion variety (mana, +attack, +armor)
 - additional stats for both players and enemies
    - initiative, decides who attacks first
