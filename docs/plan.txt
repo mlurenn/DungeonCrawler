@@ -1,0 +1,167 @@
+========= Text based Dungeon Crawler =========
+
+            Basic idea and structure.
+            Made as a vauge blueprint before coding.
+
+
+A console game where the player explores [6] rooms,
+ fights [3] kind of enemies,
+ collects gear and gold, 
+ and wins by [defeating a boss] or loses by [dying].
+
+
+ Things needed:
+ - player
+ - rooms
+ - enemies
+ - gold
+ - items
+ 
+
+
+ Classes:
+ - game
+ - player
+ - enemy
+    - boss
+ - item
+    - gear
+    - potion
+
+
+ Class components:
+ - enum: gear_slot (head, chest, gloves, pants, footwear, hand)
+ - enum: direction (north, east, south, west)
+ 
+- game
+   - player: player
+   - list: rooms
+   - bool: is_running
+
+ - player
+    - int: health
+    - int: max_health
+    - int: attack
+    - int: current_gold
+    - list: inventory
+    - room: current_room
+    - dictionary: equipped_gear (slot -> gear, empty if nothing equipped)
+
+ - room
+    - string: name
+    - list: enemies
+    - list: items
+    - dictionary: exits (direction -> room)
+
+ - enemy
+    - string: name
+    - int: health
+    - int: attack
+    - int: gold_reward
+    - item: loot (can be empty)
+    - float: armor
+
+- item
+    - string: name
+    - int: value
+
+- gear
+    - enum: gear_slot
+    - float: armor
+    - int: attack
+
+- potion
+    - int: heal_amount
+
+
+
+------ Commands ------
+The player uses written commands to make decicions, interact and act.
+commands are not case sensitive, take bfg = Take BFG
+
+Commands:
+   - go [north, east, west, south]
+   - look (descirbes the room)
+   - look [at enemy]
+   - take [sword]
+   - equip [sword]
+   - attack [enemy]
+   - use [potion]
+   - buy [potion]
+   - sell [potion]
+   - inventory
+   - quit
+   - unknown input
+
+
+
+------ Combat & Armor ------
+Combat is turn based, the player and enemies engaged in a fight each take turns to attack or act (use items etc.).
+After a combat encounter enemies may drop loot such as gold or items.
+
+Damage numbers are rounded.
+An attack could possibly inflict 0 dmg.
+
+Armor reduces incoming damage (dmg) by a percentage.
+
+Dmg reduction % = Armor / (Armor + K)
+
+K is a constant with the value 100.
+
+Example: 
+   - Armor = 16.0
+   - Dmg reduction % = 16.0 / (16.0 + 100.0) = 16.0 / 116.0 = 0.138 = 13.8%
+
+   The armor reduces the incoming dmg by 13.8%
+
+
+
+------ Boss ------
+The Boss is an enemy with special behavior and when killed, the player wins the game.
+
+The Boss could have 2 phases, the second phase begins when health < 50%, the boss then heals and gets a dmg buff
+A phase can not repeat.
+
+
+
+------ Rules ------
+ - Player total attack = base attack + attack of all equipped gear
+ - Player total armor  = sum of armor of all equipped gear (calculated, not stored)
+ - Killing an enemy: player gets its gold_reward, loot drops into the room, enemy is removed from the room
+ - Shop: items there are bought with `buy`, not `take`. `buy` costs the item's value. `sell` pays half the value. Buy and sell only work in the Shop.
+ - Using a potion takes your turn in combat. It can't heal past max_health.
+ - Killing the boss ends the game with a win. Health reaching 0 for the player ends it with a loss.
+
+
+
+------ Map ------
+Basic map of rooms.
+Could be updated later to be procedurally generated, which makes every game different.
+The player can not leave a room if the room still has living enemies in it.
+
+          [Boss Chamber]
+               |
+[Shop] -- [Main Hall]
+               |
+          [Goblin Den] -- [Orc Pit]
+               |
+            [Start]
+
+
+
+------ Starting Stats ------
+         Health   Attack   Armor
+Player   100      10       0 (gear adds)
+Rat	   20	      5	      0
+Goblin	35	      8	      10
+Orc	   60	      12	      25
+Boss	   80	      15	      20
+
+
+------ Notes/ideas for later ------
+- make each enemy type their own class with different behaviours, such as abilities or items
+- more potion variety (mana, +attack, +armor)
+- additional stats for both players and enemies
+   - initiative, decides who attacks first
+   - agility, dodge chance
+   - and so on
